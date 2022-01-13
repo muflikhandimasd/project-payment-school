@@ -53,6 +53,7 @@ class PetugasController extends Controller
             'username' => Str::lower($request->username),
             'password' => Hash::make('spp12345678'),
         ]);
+
         $user->assignRole('petugas');
         $image  = $request->file('image');
         $image_url = CloudinaryStorage::upload($image->getRealPath(), $image->getClientOriginalName());
@@ -110,7 +111,7 @@ class PetugasController extends Controller
             'jenis_kelamin' => $request->jenis_kelamin,
             'image' => $image_url
         ]);
-        return redirect()->back()->with(['pesan' => 'Petugas berhasil diupdate!']);
+        return redirect()->route('petugas.index')->with(['pesan' => 'Petugas berhasil diupdate!']);
     }
 
     /**
@@ -121,8 +122,11 @@ class PetugasController extends Controller
      */
     public function destroy($id)
     {
-        $petugas = Petugas::finfOrFail($id);
+
+
+        $petugas = Petugas::findOrFail($id);
+        User::findOrFail($petugas->user_id)->delete();
         $petugas->delete();
-        return 'success';
+        return back();
     }
 }

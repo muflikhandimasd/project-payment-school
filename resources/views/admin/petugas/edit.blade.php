@@ -28,17 +28,13 @@
                     </h6>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('petugas.update', $petugas->id) }}" method="POST">
+                    <form action="{{ route('petugas.update', $petugas->id) }}" method="POST"
+                        enctype="multipart/form-data">
                         @csrf
                         @method('PATCH')
                         <div class="form-group">
                             <label for="nama_petugas">Nama Petugas</label>
                             <input type="text" value="{{ $petugas->nama_petugas }}" name="nama_petugas" id="nama_petugas"
-                                class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="username">Username</label>
-                            <input type="text" value="{{ $petugas->username }}" name="username" id="username"
                                 class="form-control" required>
                         </div>
                         <div class="form-group">
@@ -55,9 +51,7 @@
                         </div>
                         <button type="submit" class="btn btn-warning text-white" style="width: 100%">UPDATE</button>
                     </form>
-                    @if ($petugas->id != 1)
-                        <a href="#" class="btn btn-danger petugas mt-2" style="width: 100%">HAPUS</a>
-                    @endif
+
                 </div>
             </div>
         </div>

@@ -79,20 +79,6 @@ Route::prefix('admin')
 			Route::resource('pembayaran-spp', 'PembayaranController');
 			Route::resource('kelas', 'KelasController');
 			Route::resource('siswa', 'SiswaController');
-			// Start New Siswa
-			// Route::get('/', [EmployeeController::class, 'index']);
-			Route::get('new-siswa', 'NewSiswaController@index')->name('new-siswa.index');
-			// Route::post('/store', [EmployeeController::class, 'store'])->name('store');
-			Route::post('new-siswa/store', 'NewSiswaController@store')->name('new-siswa.store');
-			// Route::get('/fetchall', [EmployeeController::class, 'fetchAll'])->name('fetchAll');
-			Route::get('new-siswa/fetchall', 'NewSiswaController@fetchAll')->name('new-siswa.fetchAll');
-			// Route::delete('/delete', [EmployeeController::class, 'delete'])->name('delete');
-			Route::delete('new-siswa/delete', 'NewSiswaController@delete')->name('new-siswa.delete');
-			// Route::get('/edit', [EmployeeController::class, 'edit'])->name('edit');
-			Route::get('new-siswa/edit', 'NewSiswaController@edit')->name('new-siswa.edit');
-			// Route::post('/update', [EmployeeController::class, 'update'])->name('update');
-			Route::post('new-siswa/update', 'NewSiswaController@update')->name('new-siswa.update');
-			// End New
 			Route::delete('delete-all-siswa', 'CheckBoxDeleteController@deleteAllSiswa')
 				->name('delete-all-siswa');
 		});

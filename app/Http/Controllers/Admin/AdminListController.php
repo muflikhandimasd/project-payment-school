@@ -2,26 +2,30 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Petugas;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Spatie\Permission\Models\Role;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 use App\DataTables\AdminListDataTable;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\CloudinaryStorage;
 
 class AdminListController extends Controller
 {
     public function index(Request $request, AdminListDataTable $datatable)
     {
-        if ($request->ajax()) {
-            return $datatable->data();
-        }
 
-        return view('admin.admin-list.index');
+        $user = User::all();
+        $petugas = Petugas::all();
+
+        return view('admin.admin-list.index', compact('user', 'petugas'));
+    }
+
+    public function create()
+    {
+        return view('admin.admin-list.create');
     }
 
     public function store(Request $request)
@@ -31,32 +35,34 @@ class AdminListController extends Controller
             'nama_petugas' => 'required',
         ]);
 
-        if ($validator->passes()) {
-            DB::transaction(function () use ($request) {
-                $user = User::create([
-                    'username' => Str::lower($request->username),
-                    'password' => Hash::make('spp12345678'),
-                ]);
-
-                $user->assignRole('admin');
-
-                Petugas::create([
-                    'user_id' => $user->id,
-                    'kode_petugas' => 'PTGR' . Str::upper(Str::random(5)),
-                    'nama_petugas' => $request->nama_petugas,
-                ]);
-            });
-
-            return response()->json(['message' => 'Data berhasil disimpan!']);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
         }
+        $user = User::create([
+            'username' => Str::lower($request->username),
+            'password' => Hash::make('spp12345678'),
+        ]);
 
-        return response()->json(['error' => $validator->errors()->all()]);
+        $user->assignRole('admin');
+
+        $image  = $request->file('image');
+        $image_url = CloudinaryStorage::upload($image->getRealPath(), $image->getClientOriginalName());
+
+        Petugas::create([
+            'user_id' => $user->id,
+            'kode_petugas' => 'PTGR' . Str::upper(Str::random(5)),
+            'nama_petugas' => $request->nama_petugas,
+            'image' => $image_url
+        ]);
+
+        return redirect()->route('admin-list.index');
     }
+
 
     public function edit($id)
     {
         $admin = User::with(['petugas'])->findOrFail($id);
-        return response()->json(['data' => $admin]);
+        return view('admin.admin-list.edit', compact('admin'));
     }
 
     public function update($id, Request $request)
@@ -64,22 +70,24 @@ class AdminListController extends Controller
         $validator = Validator::make($request->all(), [
             'nama_petugas' => 'required',
         ]);
-
-        if ($validator->passes()) {
-            Petugas::where('user_id', $id)->update([
-                'nama_petugas' => $request->nama_petugas,
-            ]);
-
-            return response()->json(['message' => 'Data berhasil diupdate!']);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
         }
 
-        return response()->json(['error' => $validator->errors()->all()]);
+        $employee = new Petugas();
+        $file   = $request->file('image');
+        $image_url = CloudinaryStorage::replace($employee->image, $file->getRealPath(), $file->getClientOriginalName());
+        Petugas::where('user_id', $id)->update([
+            'nama_petugas' => $request->nama_petugas,
+            'image' => $image_url
+        ]);
+        return redirect()->route('admin-list.index')->with(['pesan' => 'Admin berhasil diupdate!']);
     }
 
     public function destroy($id)
     {
         Petugas::where('user_id', $id)->delete();
         User::findOrFail($id)->delete();
-        return response()->json(['message' => 'Data berhasil dihapus!']);
+        return back();
     }
 }

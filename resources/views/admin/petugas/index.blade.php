@@ -28,7 +28,7 @@
                         <th>No</th>
                         <th>Nama Petugas</th>
                         <th>Kode Petugas</th>
-                        <th>Username</th>
+
                         <th>Foto</th>
                         <th>Jenis Kelamin</th>
                         <th>Aksi</th>
@@ -40,15 +40,15 @@
                             <td>{{ $k += 1 }}</td>
                             <td>{{ $v->nama_petugas }}</td>
                             <td>{{ $v->kode_petugas }}</td>
-                            <td>{{ $v->username }}</td>
+
                             <td><img src="{{ $v->image }}" width="50" class="img-thumbnail rounded" alt="foto"></td>
                             <td>{{ $v->jenis_kelamin }}</td>
                             <td>
-                                <form action="{{ route('petugas.destroy', [$v->id]) }}" method="post"
+                                <form action="{{ route('petugas.destroy', $v->id) }}" method="post"
                                     onsubmit="return confirm('Hapus {{ $v->nama_petugas }}')">
                                     @csrf
                                     @method('DELETE')
-                                    <a href="{{ route('petugas.edit', [$v->id]) }}" class="btn btn-warning"><i
+                                    <a href="{{ route('petugas.edit', $v->id) }}" class="btn btn-warning"><i
                                             class="fa fa-edit"></i>Edit</a>
                                     <button type="submit" class="btn btn-danger"><i class="fa fa-trash">
                                             Hapus</i></button>

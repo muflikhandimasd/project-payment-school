@@ -34,10 +34,6 @@ class SiswaController extends Controller
      */
     public function index(Request $request, SiswaDataTable $datatable)
     {
-        if ($request->ajax()) {
-            return $datatable->data();
-        }
-
         $siswa = Siswa::all();
         $spp = Spp::all();
         $kelas = Kelas::all();
@@ -51,6 +47,12 @@ class SiswaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+    public function create()
+    {
+        return view('admin.siswa.create');
+    }
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -62,35 +64,32 @@ class SiswaController extends Controller
             'no_telepon' => 'required',
         ]);
 
-        if ($validator->passes()) {
-            DB::transaction(function () use ($request) {
-                $user = User::create([
-                    'username' => Str::lower($request->username),
-                    'password' => Hash::make('spp12345678'),
-                ]);
-
-                $user->assignRole('siswa');
-                $image  = $request->file('image');
-                $image_url = CloudinaryStorage::upload($image->getRealPath(), $image->getClientOriginalName());
-
-                Siswa::create([
-                    'user_id' => $user->id,
-                    'kode_siswa' => 'SSWR' . Str::upper(Str::random(5)),
-                    'image' => $image_url,
-                    'nisn' => $request->nisn,
-                    'nis' => $request->nis,
-                    'nama_siswa' => $request->nama_siswa,
-                    'jenis_kelamin' => $request->jenis_kelamin,
-                    'alamat' => $request->alamat,
-                    'no_telepon' => $request->no_telepon,
-                    'kelas_id' => $request->kelas_id,
-                ]);
-            });
-
-            return response()->json(['message' => 'Data berhasil disimpan!']);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
         }
 
-        return response()->json(['error' => $validator->errors()->all()]);
+        $user = User::create([
+            'username' => Str::lower($request->username),
+            'password' => Hash::make('spp12345678'),
+        ]);
+
+        $user->assignRole('siswa');
+        $image  = $request->file('image');
+        $image_url = CloudinaryStorage::upload($image->getRealPath(), $image->getClientOriginalName());
+
+        Siswa::create([
+            'user_id' => $user->id,
+            'kode_siswa' => 'SSWR' . Str::upper(Str::random(5)),
+            'image' => $image_url,
+            'nisn' => $request->nisn,
+            'nis' => $request->nis,
+            'nama_siswa' => $request->nama_siswa,
+            'jenis_kelamin' => $request->jenis_kelamin,
+            'alamat' => $request->alamat,
+            'no_telepon' => $request->no_telepon,
+            'kelas_id' => $request->kelas_id,
+        ]);
+        return redirect()->route('siswa.index');
     }
 
     /**
@@ -99,10 +98,11 @@ class SiswaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
     public function edit($id)
     {
         $siswa = Siswa::with(['kelas', 'spp'])->findOrFail($id);
-        return response()->json(['data' => $siswa]);
+        return view('admin.siswa.edit', ['siswa' => $siswa]);
     }
 
     /**
@@ -119,20 +119,25 @@ class SiswaController extends Controller
             'alamat' => 'required',
             'no_telepon' => 'required',
         ]);
-
-        if ($validator->passes()) {
-            Siswa::findOrFail($id)->update([
-                'nama_siswa' => $request->nama_siswa,
-                'jenis_kelamin' => $request->jenis_kelamin,
-                'alamat' => $request->alamat,
-                'no_telepon' => $request->no_telepon,
-                'kelas_id' => $request->kelas_id,
-            ]);
-
-            return response()->json(['message' => 'Data berhasil diupdate!']);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
         }
 
-        return response()->json(['error' => $validator->errors()->all()]);
+        $siswa = Siswa::findOrFail($id);
+
+        $employee = new Siswa();
+        $file   = $request->file('image');
+        $image_url = CloudinaryStorage::replace($employee->image, $file->getRealPath(), $file->getClientOriginalName());
+
+        $siswa->update([
+            'nama_siswa' => $request->nama_siswa,
+            'jenis_kelamin' => $request->jenis_kelamin,
+            'alamat' => $request->alamat,
+            'no_telepon' => $request->no_telepon,
+            'kelas_id' => $request->kelas_id,
+            'image' => $image_url
+        ]);
+        return redirect()->route('siswa.index')->with(['pesan' => 'Siswa berhasil diupdate!']);
     }
 
     /**
@@ -146,6 +151,6 @@ class SiswaController extends Controller
         $siswa = Siswa::findOrFail($id);
         User::findOrFail($siswa->user_id)->delete();
         $siswa->delete();
-        return response()->json(['message' => 'Data berhasil dihapus!']);
+        return back();
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 class CreateSiswaTable extends Migration
 {
@@ -23,8 +23,8 @@ class CreateSiswaTable extends Migration
             $table->string('jenis_kelamin')->nullable();
             $table->string('alamat')->nullable();
             $table->string('no_telepon')->nullable();
-            $table->foreignId('user_id')->constrained('users')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('kelas_id')->constrained('kelas')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onUpdate('cascade')->onDelete('cascade')->nullable();
+            $table->foreignId('kelas_id')->constrained('kelas')->onUpdate('cascade')->onDelete('cascade')->nullable();
             $table->timestamps();
         });
     }

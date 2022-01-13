@@ -52,6 +52,7 @@ class AdminListController extends Controller
             'user_id' => $user->id,
             'kode_petugas' => 'PTGR' . Str::upper(Str::random(5)),
             'nama_petugas' => $request->nama_petugas,
+            'jenis_kelamin' => $request->jenis_kelamin,
             'image' => $image_url
         ]);
 
@@ -61,8 +62,9 @@ class AdminListController extends Controller
 
     public function edit($id)
     {
-        $admin = User::with(['petugas'])->findOrFail($id);
-        return view('admin.admin-list.edit', compact('admin'));
+        // $admin = User::with(['petugas'])->findOrFail($id);
+        $petugas = Petugas::findOrFail($id);
+        return view('admin.admin-list.edit', compact('petugas'));
     }
 
     public function update($id, Request $request)
@@ -77,8 +79,9 @@ class AdminListController extends Controller
         $employee = new Petugas();
         $file   = $request->file('image');
         $image_url = CloudinaryStorage::replace($employee->image, $file->getRealPath(), $file->getClientOriginalName());
-        Petugas::where('user_id', $id)->update([
+        Petugas::find($id)->update([
             'nama_petugas' => $request->nama_petugas,
+            'jenis_kelamin' => $request->jenis_kelamin,
             'image' => $image_url
         ]);
         return redirect()->route('admin-list.index')->with(['pesan' => 'Admin berhasil diupdate!']);
@@ -86,8 +89,10 @@ class AdminListController extends Controller
 
     public function destroy($id)
     {
-        Petugas::where('user_id', $id)->delete();
-        User::findOrFail($id)->delete();
+        $petugas = Petugas::findOrFail($id);
+        // Petugas::find($id)->delete();
+        User::findOrFail($petugas->user_id)->delete();
+        $petugas->delete();
         return back();
     }
 }

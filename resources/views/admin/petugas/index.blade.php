@@ -28,7 +28,6 @@
                         <th>No</th>
                         <th>Nama Petugas</th>
                         <th>Kode Petugas</th>
-
                         <th>Foto</th>
                         <th>Jenis Kelamin</th>
                         <th>Aksi</th>

@@ -30,7 +30,10 @@ class UserController extends Controller
     }
     public function create()
     {
-        return view('admin.user.create');
+        $user = User::all();
+        $petugas = Petugas::all();
+        $siswa = Siswa::all();
+        return view('admin.user.create', compact('user', 'siswa', 'petugas'));
     }
     /**
      * Show the form for editing the specified resource.
@@ -55,10 +58,14 @@ class UserController extends Controller
             if ($validator->fails()) {
                 return redirect()->back()->withErrors($validator);
             }
+            $image = $request->file('image');
+            $image_url = CloudinaryStorage::upload($image->getRealPath(), $image->getClientOriginalName());
+
             $user = User::create([
                 'username' => Str::lower($request->username),
                 'password' => Hash::make('spp12345678'),
                 'email' => $request->email,
+                'image' => $image_url
             ]);
 
             $user->assignRole('admin');
@@ -81,10 +88,14 @@ class UserController extends Controller
                 return redirect()->back()->withErrors($validate);
             }
 
+            $image = $request->file('image');
+            $image_url = CloudinaryStorage::upload($image->getRealPath(), $image->getClientOriginalName());
+
             $user = User::create([
                 'username' => Str::lower($request->username),
                 'password' => Hash::make('spp12345678'),
                 'email' => $request->email,
+                'image' => $image_url
             ]);
 
             $user->assignRole('petugas');
@@ -108,10 +119,14 @@ class UserController extends Controller
                 return redirect()->back()->withErrors($validator);
             }
 
+            $image = $request->file('image');
+            $image_url = CloudinaryStorage::upload($image->getRealPath(), $image->getClientOriginalName());
+
             $user = User::create([
                 'username' => Str::lower($request->username),
                 'password' => Hash::make('spp12345678'),
                 'email' => $request->email,
+                'image' => $image_url
             ]);
 
             $user->assignRole('siswa');
@@ -144,6 +159,7 @@ class UserController extends Controller
             'password' => $request->password ? Hash::make($request->password) : $request->old_password,
             'image' => $image_url
         ]);
+        return redirect()->route('user.index');
     }
 
     public function destroy($id)

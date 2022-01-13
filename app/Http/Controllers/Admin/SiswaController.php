@@ -50,7 +50,8 @@ class SiswaController extends Controller
 
     public function create()
     {
-        return view('admin.siswa.create');
+        $kelas =  Kelas::all();
+        return view('admin.siswa.create', compact('kelas'));
     }
 
     public function store(Request $request)
@@ -76,7 +77,6 @@ class SiswaController extends Controller
         $user->assignRole('siswa');
         $image  = $request->file('image');
         $image_url = CloudinaryStorage::upload($image->getRealPath(), $image->getClientOriginalName());
-
         Siswa::create([
             'user_id' => $user->id,
             'kode_siswa' => 'SSWR' . Str::upper(Str::random(5)),
@@ -101,8 +101,9 @@ class SiswaController extends Controller
 
     public function edit($id)
     {
+        $kelas =  Kelas::all();
         $siswa = Siswa::with(['kelas', 'spp'])->findOrFail($id);
-        return view('admin.siswa.edit', ['siswa' => $siswa]);
+        return view('admin.siswa.edit', ['siswa' => $siswa, 'kelas' => $kelas]);
     }
 
     /**

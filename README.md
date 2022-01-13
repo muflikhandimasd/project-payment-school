@@ -10,7 +10,7 @@ Website SPP Sekolah Dibuat Dengan :
 
 # PACKAGE
 - Yajra Laravel DataTable Serverside 
-- Laravel Fortify (autentiksai)
+- Laravel Fortify (autentikasi)
 - Spatie Laravel Role-Permission
 - Laravel DOMPDF (pdf)
 
@@ -21,11 +21,11 @@ username : admin123
 password : password
 
 - PETUGAS
-username : elaina123
+username : ibrahim123
 password : password
 
 - SISWA
-username : diva123
+username : umar123
 password : password
 
 # ROLE USER
@@ -40,22 +40,20 @@ adalah : spp12345678 (jika belum di ubah) / (jika bukan ditambahkan dari databas
 
 # FEATURES 
 1.ADMIN
-(CRUD AJAX NO RELOAD)
+
 - CRUD Siswa
 - CRUD Kelas
 - CRUD Petugas
 - CRUD Tahun & Nominal SPP
 - CRUD Admin
-- CRUD Role
-- CRUD Permission
-(CRUD AJAX NO RELOAD)
+
 
 - Membuat Pembayaran Spp
 - History Pembayaran Spp 
 - Lihat Status pembayaran spp
 - PRINT Pdf History Pembayaran per-range tanggal
 - PRINT Pdf History Pembayaran Spp Per Siswa
-- Setting (User Role & Permission) 
+ 
 
 2.PETUGAS
 - Read Siswa

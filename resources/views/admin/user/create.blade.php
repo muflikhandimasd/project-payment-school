@@ -44,11 +44,20 @@
                         </div>
                         <div class="form-group">
                             <label for="role">Role</label>
-                            <select name="role" id="role" class="form-control">
+                            <select name="role" id="role" class="form-control" onchange="checkRole(this)">
                                 <option disabled="">- PILIH ROLE -</option>
                                 <option value="admin">Admin</option>
                                 <option value="petugas">Petugas</option>
                                 <option value="siswa">Siswa</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="pilihan-kelas" style="display: none">
+                            <label for="kelas_id">Kelas:</label>
+                            <select required="" name="kelas_id" id="kelas_id" class="form-control select2bs4">
+                                <option disabled="" selected="">- PILIH KELAS -</option>
+                                @foreach ($kelas as $row)
+                                    <option value="{{ $row->id }}">{{ $row->nama_kelas }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <button type="submit" class="btn btn-info" style="width: 100%">SIMPAN</button>
@@ -71,4 +80,14 @@
             @endif
         </div>
     </div>
+    <script>
+        const role = document.getElementById('role');
+        const checkRole = (e) => {
+            if (e.value === 'siswa') {
+                document.getElementById('pilihan-kelas').style.display = 'block';
+            } else {
+                document.getElementById('pilihan-kelas').style.display = 'none';
+            }
+        }
+    </script>
 @endsection

@@ -12,6 +12,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\CloudinaryStorage;
+use App\Models\Kelas;
 
 class UserController extends Controller
 {
@@ -33,7 +34,8 @@ class UserController extends Controller
         $user = User::all();
         $petugas = Petugas::all();
         $siswa = Siswa::all();
-        return view('admin.user.create', compact('user', 'siswa', 'petugas'));
+        $kelas =  Kelas::all();
+        return view('admin.user.create', compact('user', 'siswa', 'petugas', 'kelas'));
     }
     /**
      * Show the form for editing the specified resource.
@@ -137,6 +139,7 @@ class UserController extends Controller
                 'user_id' => $user->id,
                 'kode_siswa' => 'SSWR' . Str::upper(Str::random(5)),
                 'image' => $image_url,
+                'kelas_id' => $request->kelas_id,
             ]);
         }
         return redirect()->route('user.index');

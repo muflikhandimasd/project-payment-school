@@ -17,6 +17,19 @@
         href="{{ asset('templates/backend/AdminLTE-3.1.0') }}/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('templates/backend/AdminLTE-3.1.0') }}/dist/css/adminlte.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+    <style>
+        .login-page {
+            background: rgb(23, 13, 193);
+            background: linear-gradient(90deg, rgba(23, 13, 193, 1) 0%, rgba(20, 215, 255, 1) 100%);
+        }
+
+        body {
+            font-family: 'Poppins';
+            font-size: 18px;
+        }
+
+    </style>
 </head>
 
 <body class="hold-transition login-page">
@@ -26,7 +39,7 @@
         </div>
         <!-- /.login-logo -->
         <div class="card">
-            <div class="card-body login-card-body">
+            <div class="rounded card-body login-card-body">
                 <p class="login-box-msg">Silahkan Login</p>
                 @error('username')
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">

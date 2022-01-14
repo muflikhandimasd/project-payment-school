@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
+use App\Models\Kelas;
 use App\Models\Siswa;
 use App\Models\Petugas;
 use Illuminate\Support\Str;
@@ -12,7 +13,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\CloudinaryStorage;
-use App\Models\Kelas;
 
 class UserController extends Controller
 {
@@ -76,6 +76,7 @@ class UserController extends Controller
             $image_url = CloudinaryStorage::upload($image->getRealPath(), $image->getClientOriginalName());
 
             Petugas::create([
+                'nama_petugas' => 'Admin Baru',
                 'user_id' => $user->id,
                 'kode_petugas' => 'PTGR' . Str::upper(Str::random(5)),
                 'image' => $image_url
@@ -105,6 +106,7 @@ class UserController extends Controller
             $image_url = CloudinaryStorage::upload($image->getRealPath(), $image->getClientOriginalName());
 
             Petugas::create([
+                'nama_petugas' => 'Petugas Baru',
                 'user_id' => $user->id,
                 'kode_petugas' => 'PTGR' . Str::upper(Str::random(5)),
                 'image' => $image_url,

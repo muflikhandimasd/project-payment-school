@@ -39,8 +39,7 @@
                         <div class="form-group">
                             <label for="password">Password</label>
                             <input type="hidden" name="old_password" id="old_password" class="form-control">
-                            <input type="password" id="password" name="password" class="form-control">
-                            <small class="text-secondary">Kosongkan password jika tidak ingin diubah</small>
+                            <input type="password" id="password" name="password" class="form-control" required>
                         </div>
                         <div class="form-group">
                             <label for="image">Pilih Foto</label>

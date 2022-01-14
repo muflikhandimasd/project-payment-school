@@ -51,6 +51,10 @@
                                 <option value="siswa">Siswa</option>
                             </select>
                         </div>
+                        <div class="form-group" id="form-nama" style="display: none">
+                            <label for="nama_siswa">Nama Siswa</label>
+                            <input type="text" name="nama_siswa" id="nama_siswa" class="form-control" required>
+                        </div>
                         <div class="form-group" id="pilihan-kelas" style="display: none">
                             <label for="kelas_id">Kelas:</label>
                             <select required="" name="kelas_id" id="kelas_id" class="form-control select2bs4">
@@ -85,8 +89,10 @@
         const checkRole = (e) => {
             if (e.value === 'siswa') {
                 document.getElementById('pilihan-kelas').style.display = 'block';
+                document.getElementById('form-nama').style.display = 'block';
             } else {
                 document.getElementById('pilihan-kelas').style.display = 'none';
+                document.getElementById('form-nama').style.display = 'none';
             }
         }
     </script>

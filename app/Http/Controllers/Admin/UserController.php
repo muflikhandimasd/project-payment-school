@@ -112,7 +112,7 @@ class UserController extends Controller
             ]);
         } elseif ($request->role == 'siswa') {
             $validator = Validator::make($request->all(), [
-
+                'nama_siswa' => 'required',
                 'username' => 'required|unique:users',
                 'email' => 'required|email|unique:users'
             ]);
@@ -136,6 +136,7 @@ class UserController extends Controller
             $image_url = CloudinaryStorage::upload($image->getRealPath(), $image->getClientOriginalName());
 
             Siswa::create([
+                'nama_siswa' => $request->nama_siswa,
                 'user_id' => $user->id,
                 'kode_siswa' => 'SSWR' . Str::upper(Str::random(5)),
                 'image' => $image_url,

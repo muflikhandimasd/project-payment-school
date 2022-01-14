@@ -53,11 +53,11 @@
                         </div>
                         <div class="form-group" id="form-nama" style="display: none">
                             <label for="nama_siswa">Nama Siswa</label>
-                            <input type="text" name="nama_siswa" id="nama_siswa" class="form-control" required>
+                            <input type="text" name="nama_siswa" id="nama_siswa" class="form-control">
                         </div>
                         <div class="form-group" id="pilihan-kelas" style="display: none">
                             <label for="kelas_id">Kelas:</label>
-                            <select required="" name="kelas_id" id="kelas_id" class="form-control select2bs4">
+                            <select name="kelas_id" id="kelas_id" class="form-control select2bs4">
                                 <option disabled="" selected="">- PILIH KELAS -</option>
                                 @foreach ($kelas as $row)
                                     <option value="{{ $row->id }}">{{ $row->nama_kelas }}</option>
